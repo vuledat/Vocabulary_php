@@ -1,0 +1,22 @@
+*{
+	margin: 0;
+	padding: 0;
+
+}
+.space{
+	margin-bottom: 5px;
+}
+.btchoice{
+	border-radius: 50%;
+}
+.btchoice:hover{
+	background: yellow;
+	color: green;
+	width: 50px;
+	height: 50px;
+	transition: 0.5s;
+	
+}
+#answer{
+	border: 1px solid #007BFF; border-radius: 10px; padding: 20px;
+}
