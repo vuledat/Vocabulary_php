@@ -1,6 +1,4 @@
-<?php 
-    // ob_start();
-    // session_start();    
+<?php   
     include '../connect.php';
     $sql = "SELECT * FROM `words` ";
     $query=mysqli_query($con,$sql);
@@ -9,8 +7,7 @@
     	array_push($rr, (array)$row);
 			}
 		$voca = json_encode((array)$rr);
-	// echo($voca);
-	// echo($voca['1']['id']);
+		// echo $voca;
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,41 +64,7 @@
 			<!-- request -->
 			<div class="col-lg-6 col-sm-12">
 				<div class="" id="answer">
-					<!-- Group of default radios - option 1 -->
-					<?php
-					// $arr = array(
-					// 	"<div class='custom-control custom-radio'>
-					// 	 <button class='btn btn-success btchoice' onclick='choice(1)' >A.</button>
-					// 	<label id='word_choice1' for='word1'>Option 1</label>
-					// </div><div class='space'></div>",
-					// 	"<div class='custom-control custom-radio'>
-					// 	 <button class='btn btn-success btchoice' onclick='choice(2)' >B.</button>
-					// 	<label id='word_choice2' for='word2'>Option 2</label>
-					// </div><div class='space'></div>",
-					// "<div class='custom-control custom-radio'>
-					// 	 <button class='btn btn-success btchoice' onclick='choice(3)' >C.</button>
-					// 	<label id='word_choice3' for='word3'>Option 3</label>
-					// </div><div class='space'></div>"
-					// );
-					// $arr_select = array(0,1,2,);
-					// shuffle($arr);
-					// foreach ($arr as $key => $value) {
-					// 	echo $value;
-					// 	switch ($key) {
-					// 		case '1':
-					// 			# code...
-					// 			break;
-					// 		case '2':
-					// 			# code...
-					// 			break;
-					// 		case '2':
-					// 			# code...
-					// 			break;
-					// 	}
-					// }
-					
-					?>
-					
+					<!-- Group of default radios - option 1 -->	
 					<div class='custom-control custom-radio'>
 						 <button class='btn btn-success btchoice' onclick='choice(1)' >A.</button>
 						<label id='word_choice1' for='word1'>Option 1</label>
@@ -152,6 +115,8 @@
 		document.getElementById("score").innerHTML = score;
 		document.getElementById("score_false").innerHTML = score_false;
 	}
+
+	
 	function test(vn,text){
 		if (text == vn) {
 			score +=1;
@@ -162,6 +127,8 @@
 		    score_false++;
 		}
 	}
+
+
 	function choice(choice){
 		var choice_sub = "word"+choice;
 
@@ -188,8 +155,9 @@
 		    //     document.getElementById("alert").style = "visibility: visible;opacity: 0;transition: visibility 0s linear 1000ms, opacity 1000ms;";
 		}
 		render();
-		console.log(text);
 	}
+
+
 	function shuffle(array) {
     let counter = array.length;
 
@@ -209,6 +177,8 @@
 
     return array;
 }
+
+
 	function getItem(){
 		var item = <?php echo (json_encode((array)$rr)) ?>;
 		return item;
