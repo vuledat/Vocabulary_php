@@ -135,22 +135,33 @@
 	var score_false = 0;
 	var audio_true = new Audio('../asset/audio/true.wav');
 	var audio_false = new Audio('../asset/audio/false.wav');
-	
+	var vn = "";
 	function render() {
 		var item = getItem();
 		// console.log(item.length);
 		var i = Math.floor((Math.random() * item.length));
 		var arr = [item[i].vn,item[i].vn_f1,item[i].vn_f2];
-		shuffle(arr);
-		console.log(arr);
+		var arr_shuffle = arr;
+		shuffle(arr_shuffle);
+		console.log(arr_shuffle);
+		en = item[i].vn;
 		document.getElementById('word_en').innerHTML = item[i].en;
-		document.getElementById('word_choice1').innerHTML = item[i].vn;
-		document.getElementById('word_choice2').innerHTML = item[i].vn_f1;
-		document.getElementById('word_choice3').innerHTML = item[i].vn_f2;
+		document.getElementById('word_choice1').innerHTML = arr_shuffle[0];
+		document.getElementById('word_choice2').innerHTML = arr_shuffle[1];
+		document.getElementById('word_choice3').innerHTML = arr_shuffle[2];
 		document.getElementById("score").innerHTML = score;
 		document.getElementById("score_false").innerHTML = score_false;
 	}
-
+	function test(vn,text){
+		if (text == vn) {
+			score +=1;
+		    audio_true.play();
+		}
+		else{
+			audio_false.play();
+		    score_false++;
+		}
+	}
 	function choice(choice){
 		var choice_sub = "word"+choice;
 
@@ -158,26 +169,26 @@
 		    case 1:
 		        document.getElementById("alert_chose").innerHTML = "Correct!";
 		        document.getElementById("alert_chose").className = "text-success";
-		        score +=1;
-		        audio_true.play();
+				var text = $('#word_choice1').text();
+		        test(en,text);
 		        break;
 		    case 2:
 		        document.getElementById("alert_chose").innerHTML = "Incorrect";
 		        document.getElementById("alert_chose").className = "text-danger";
-		        audio_false.play();
-		        score_false++;
+				var text = $('#word_choice2').text();
+		        test(en,text);
 		        break;
 		    case 3:
 		        document.getElementById("alert_chose").innerHTML = "Incorrect";
 		        document.getElementById("alert_chose").className = "text-danger";
-		        audio_false.play();
-		        score_false++;
+				var text = $('#word_choice3').text();
+		        test(en,text);
 		        break;
 		    // default:
 		    //     document.getElementById("alert").style = "visibility: visible;opacity: 0;transition: visibility 0s linear 1000ms, opacity 1000ms;";
 		}
 		render();
-		console.log(choice_sub);
+		console.log(text);
 	}
 	function shuffle(array) {
     let counter = array.length;
