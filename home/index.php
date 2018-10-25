@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="../asset/css/style.css">
     <script type="text/javascript" src="../asset/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../asset/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 </head>
 <body>
 	<div class="container">
@@ -44,26 +45,14 @@
 				</div>
 			</div>
 		<div class="row">
-			<!-- réponse -->
-			<div class="col-lg-6 col-sm-12">
-				<div style="border: 1px solid #007BFF; border-radius: 10px;margin-bottom: 10px;padding: 10px;">
-
-					<h4 class="text-warning text-center" >
-						True: <span class="text-success" id="score"></span>  False: <span class="text-danger" id="score_false"></span>
-					</h4>
-					<div class="alert alert-success text-center" id="alert">
-						<strong id="alert_chose">chose the best aswer!</strong> 
-					</div>
-					<!-- <div class="alert alert-success" style="display: none;">
-						<strong>Success!</strong> Indicates a successful or positive action.
-					</div> -->
-				</div>
-			</div>
+			
 
 
 			<!-- request -->
 			<div class="col-lg-6 col-sm-12">
-				<div class="" id="answer">
+				<div class="space" style="position: relative;padding: 20px;height: 170px;">
+					<div class="answer"></div>
+					
 					<!-- Group of default radios - option 1 -->	
 					<div class='custom-control custom-radio'>
 						 <button class='btn btn-success btchoice' onclick='choice(1)' >A.</button>
@@ -88,17 +77,85 @@
 			
 			</div>
 
+			<!-- réponse -->
+			<div class="col-lg-6 col-sm-12">
+				<div style="margin-bottom: 10px;padding: 10px; position: relative;">
+					<div class="answer"></div>
+					<h4 class="text-success text-center" >
+						<i class="fas fa-check"></i> <span class="text-success" id="score"></span>  <span class="text-danger" id="score"> <i class="fas fa-times"></i> </span><span class="text-danger" id="score_false"></span>
+					</h4>
+					<div class=" text-success text-center" id="alert">
+						<strong id="alert_chose"><h5>chose</h5></strong> 
+					</div>
+					<div class="" style="">
+						<div style="">
+							<table class="table text-center">
+								<thead class="text-info">
+									<tr>
+										<th scope="col">English</th>
+										<th scope="col">Vietnamese</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td id="word_en_answer">...</td>
+										<td id="word_vn_answer">...</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- <div class="alert alert-success" style="display: none;">
+						<strong>Success!</strong> Indicates a successful or positive action.
+					</div> -->
+				</div>
+			</div>
+
 		</div>
+		<h5 id="total" class="text-center text-danger">100</h5>
+		<div id="list" style="display: none;">
+			<table class="table text-center">
+								<thead class="text-info">
+									<tr>
+										<th scope="col">English</th>
+										<th scope="col">Vietnamese</th>
+									</tr>
+								</thead>
+								<tbody id="list_tr">
+									<tr>
+										<td id="word_en_list">...</td>
+										<td id="word_vn_list">...</td>
+									</tr>
+
+								</tbody>
+							</table>
+		</div>
+	</div>
+	
+</body>
+
+</html>
+<!-- progress -->
+	
+<div id="progress_bg">
+
+	<div id="progress">
 
 	</div>
-</body>
-</html>
+</div>
+
+<div id="sound" onclick="sound()">
+	<i id="sound_on" class="fas fa-volume-up"></i>
+	<i id="sound_off" class="fas fa-microphone-alt-slash"></i>
+</div>
 <script type="text/javascript">
 	var score = 0;
 	var score_false = 0;
 	var audio_true = new Audio('../asset/audio/true.wav');
 	var audio_false = new Audio('../asset/audio/false.wav');
 	var vn = "";
+	var en  ="";
 	function render() {
 		var item = getItem();
 		// console.log(item.length);
@@ -107,7 +164,9 @@
 		var arr_shuffle = arr;
 		shuffle(arr_shuffle);
 		console.log(arr_shuffle);
-		en = item[i].vn;
+		vn = item[i].vn;
+		en = item[i].en;
+		document.getElementById('total').innerHTML = item.length +' words';
 		document.getElementById('word_en').innerHTML = item[i].en;
 		document.getElementById('word_choice1').innerHTML = arr_shuffle[0];
 		document.getElementById('word_choice2').innerHTML = arr_shuffle[1];
@@ -121,35 +180,40 @@
 		if (text == vn) {
 			score +=1;
 		    audio_true.play();
+		    document.getElementById("alert_chose").innerHTML = "Correct!";
+		    document.getElementById("alert_chose").className = "text-success";
 		}
 		else{
 			audio_false.play();
+			document.getElementById("alert_chose").innerHTML = "Incorrect";
+		    document.getElementById("alert_chose").className = "text-danger";
 		    score_false++;
 		}
 	}
 
+	function answer(en,vn) {
+		document.getElementById('word_en_answer').innerHTML = en;
+		document.getElementById('word_vn_answer').innerHTML = vn;
+	}
 
 	function choice(choice){
 		var choice_sub = "word"+choice;
-
+		answer(en,vn);
 		switch(choice) {
 		    case 1:
-		        document.getElementById("alert_chose").innerHTML = "Correct!";
-		        document.getElementById("alert_chose").className = "text-success";
+		        
 				var text = $('#word_choice1').text();
-		        test(en,text);
+		        test(vn,text);
 		        break;
 		    case 2:
-		        document.getElementById("alert_chose").innerHTML = "Incorrect";
-		        document.getElementById("alert_chose").className = "text-danger";
+		       
 				var text = $('#word_choice2').text();
-		        test(en,text);
+		        test(vn,text);
 		        break;
 		    case 3:
-		        document.getElementById("alert_chose").innerHTML = "Incorrect";
-		        document.getElementById("alert_chose").className = "text-danger";
+		        
 				var text = $('#word_choice3').text();
-		        test(en,text);
+		        test(vn,text);
 		        break;
 		    // default:
 		    //     document.getElementById("alert").style = "visibility: visible;opacity: 0;transition: visibility 0s linear 1000ms, opacity 1000ms;";
@@ -184,4 +248,35 @@
 		return item;
 	}
 	render();
+	var set_sound = 0;
+	function sound(argument) {
+		
+		if (set_sound == 0) {
+			set_sound = 1;
+			audio_true = new Audio("../asset/audio/silent.mp3");
+			audio_false = new Audio("../asset/audio/silent.mp3");
+			document.getElementById('sound_on').style = "visibility: visible";
+			document.getElementById('sound_off').style = "visibility: hidden";
+			console.log("click");
+		}
+		if (set_sound){
+			
+			audio_true = new Audio('../asset/audio/true.wav');
+			audio_false = new Audio('../asset/audio/false.wav');
+			document.getElementById('sound_on').style = "visibility: hidden";
+			document.getElementById('sound_off').style = "visibility: visible";
+		}
+
+	}
+
+	$("#total").click(function(){
+        $("#list").toggle(1000);
+        var words = getItem();
+        for (var i = words.length - 1; i >= 0; i--) {
+        	
+        	document.getElementById('word_en_list').innerHTML = words[i].en;
+			document.getElementById('word_vn_list').innerHTML = words[i].vn;
+        }
+
+    });
 </script>
