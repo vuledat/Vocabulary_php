@@ -54,3 +54,18 @@ body{
 	width: 50%;
 	height: 10px;
 }
+#try{
+	display: none;
+	position: fixed;
+	z-index: 100;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.1);
+}
+#try button{
+	width: 150px;
+	height: 130px;
+	border-radius: 75px;
+}

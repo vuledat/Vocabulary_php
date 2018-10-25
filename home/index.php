@@ -113,7 +113,12 @@
 			</div>
 
 		</div>
-		<h5 id="total" class="text-center text-danger">100</h5>
+
+		<h5 class="text-center"> 
+			<span id="tested" class="text-center text-warning">50</span> 
+			<span id="total" class="text-center text-danger">100</span> 
+		</h5>
+
 		<div id="list" style="display: none;">
 			<table class="table text-center">
 								<thead class="text-info">
@@ -123,11 +128,18 @@
 									</tr>
 								</thead>
 								<tbody id="list_tr">
+									<?php
+										foreach ($rr as $key => $value) {
+											?>
+									
 									<tr>
-										<td id="word_en_list">...</td>
-										<td id="word_vn_list">...</td>
+										<td id="word_en_list"><?php echo $value['en']; ?></td>
+										<td id="word_vn_list"><?php echo $value['vn'] ?></td>
 									</tr>
-
+									<?php
+											
+										}
+									?>
 								</tbody>
 							</table>
 		</div>
@@ -145,10 +157,18 @@
 	</div>
 </div>
 
+<div id="try">
+	<div class="text-center" style="padding: 20%; ">
+		<button class="btn btn-success" onclick="render()">Try Again</button>
+	</div>
+</div>
+
 <div id="sound" onclick="sound()">
 	<i id="sound_on" class="fas fa-volume-up"></i>
 	<i id="sound_off" class="fas fa-microphone-alt-slash"></i>
 </div>
+
+
 <script type="text/javascript">
 	var score = 0;
 	var score_false = 0;
@@ -156,25 +176,50 @@
 	var audio_false = new Audio('../asset/audio/false.wav');
 	var vn = "";
 	var en  ="";
+	var item_default = getItem();
+	var item = getItem();
+	var total = item_default.length;
 	function render() {
-		var item = getItem();
+		
 		// console.log(item.length);
-		var i = Math.floor((Math.random() * item.length));
-		var arr = [item[i].vn,item[i].vn_f1,item[i].vn_f2];
-		var arr_shuffle = arr;
-		shuffle(arr_shuffle);
-		console.log(arr_shuffle);
-		vn = item[i].vn;
-		en = item[i].en;
-		document.getElementById('total').innerHTML = item.length +' words';
-		document.getElementById('word_en').innerHTML = item[i].en;
-		document.getElementById('word_choice1').innerHTML = arr_shuffle[0];
-		document.getElementById('word_choice2').innerHTML = arr_shuffle[1];
-		document.getElementById('word_choice3').innerHTML = arr_shuffle[2];
-		document.getElementById("score").innerHTML = score;
-		document.getElementById("score_false").innerHTML = score_false;
-	}
+		console.log(item_default.length);
+		if (item.length > 188) 
+		{
+			var i = Math.floor((Math.random() * item.length));
+			var arr = [item[i].vn,item[i].vn_f1,item[i].vn_f2];
+			var arr_shuffle = arr;
+			shuffle(arr_shuffle);
+			console.log(arr_shuffle);
+			vn = item[i].vn;
+			en = item[i].en;
+			document.getElementById('total').innerHTML = total +' words';
+			document.getElementById('word_en').innerHTML = item[i].en;
+			document.getElementById('word_choice1').innerHTML = arr_shuffle[0];
+			document.getElementById('word_choice2').innerHTML = arr_shuffle[1];
+			document.getElementById('word_choice3').innerHTML = arr_shuffle[2];
+			document.getElementById("score").innerHTML = score;
+			document.getElementById("score_false").innerHTML = score_false;
+			document.getElementById("tested").innerHTML = score_false+score;
+			item.splice(i,1);
+		}
+		else{
+			document.getElementById("try").style = "display: block";
+			alert("Your Score is: "+ score);
+			item = getItem();
+			score = 0;
+			score_false = 0;
 
+		}
+		
+	}
+	function restart(){
+        var conf=confirm("Your Score is:");
+        item = item_default;
+        score = 0;
+       	score_false = 0;
+		var i = Math.floor((Math.random() * item.length));
+        return conf;
+    }
 	
 	function test(vn,text){
 		if (text == vn) {
@@ -272,11 +317,13 @@
 	$("#total").click(function(){
         $("#list").toggle(1000);
         var words = getItem();
-        for (var i = words.length - 1; i >= 0; i--) {
-        	
-        	document.getElementById('word_en_list').innerHTML = words[i].en;
-			document.getElementById('word_vn_list').innerHTML = words[i].vn;
-        }
+        
+
+    });
+    $("#try").click(function(){
+        $("#try").fadeOut(1000);
+        
+        
 
     });
 </script>
