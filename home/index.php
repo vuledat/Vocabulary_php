@@ -130,6 +130,7 @@
 		</div>
 
 		<h5 class="text-center"> 
+			<span id="demo">A</span>
 			<span id="tested" class="text-center text-warning">50</span> 
 			<span id="total" class="text-center text-danger">100</span> 
 		</h5>
@@ -166,7 +167,7 @@
 <!-- progress -->
 	
 <div id="progress_bg">
-
+	
 	<div id="progress">
 
 	</div>
@@ -197,6 +198,7 @@
 	var vn = "";
 	var en  ="";
 	var rr = <?php echo ($voca) ?>;
+
 
 	var item_default = getItem(rr);
 	var item = getItem(rr);
@@ -290,6 +292,7 @@
 	function choice(choice){
 		var choice_sub = "word"+choice;
 		answer(en,vn);
+		count = 5;
 		switch(choice) {
 		    case 1:
 		        
@@ -332,8 +335,24 @@
 
     return array;
 }
-
 	
+	var count = 5;
+	function count_down() {
+		var x = setInterval(function() {
+	    if (count >=0) {
+	    	document.getElementById("demo").innerHTML = "Time: " + count;
+	    	document.getElementById("progress").style = "width: "+(1-count/5)*100+"%";
+	    	count--;
+	    }
+	    else{
+	    	render();
+	    	count = 5;
+	    	audio_false.play();
+	    }
+	    
+	}, 1000);
+	}
+	count_down();
 	function getItem(arr){
 		var item = arr;
 		return item;
