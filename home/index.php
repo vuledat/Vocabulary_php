@@ -1,13 +1,27 @@
 <?php   
     include '../connect.php';
-    $sql = "SELECT * FROM `words` ";
+	
+	$startTime = date("Y-m-d H:i:s");
+    $date_curently = date("Y-m-d H:i:s",  strtotime($startTime)-86400);
+    
+    $sql = "SELECT `en`, `vn`, `mem`, `vn_f1`, `vn_f2` FROM `words` ";
+    $sql2 = "SELECT `en`, `vn`, `mem`, `vn_f1`, `vn_f2` FROM `words` WHERE `created_at`> '$date_curently'";
     $query=mysqli_query($con,$sql);
+    $query2=mysqli_query($con,$sql2);
     $rr = array();
+    $rr2 = array();
     while ($row= mysqli_fetch_array($query)){
     	array_push($rr, (array)$row);
 			}
+	while ($row= mysqli_fetch_array($query2)){
+    	array_push($rr2, (array)$row);
+			}
+
 		$voca = json_encode((array)$rr);
-		// echo $voca;
+		$voca2 = json_encode((array)$rr2);
+
+
+	// echo ;
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,10 +36,11 @@
 <body>
 	<div class="container">
 		<h1 class="text-center text-success">
-			VOCABULARY
+			<a href="http://localhost/Vocabulary_php/home/">VOCABULARY</a>
+			
 		</h1>
 		
-			<div class="col-lg-12 col-sm-12" style="padding: 0; margin-bottom: 10px;">
+			<div class="col-lg-12 col-sm-12 col-md-12" style="padding: 0; margin-bottom: 10px;">
 				<div style="border: 1px solid #007BFF; border-radius: 10px;">
 					<table class="table text-center">
 						<thead class="text-info">
@@ -49,7 +64,7 @@
 
 
 			<!-- request -->
-			<div class="col-lg-6 col-sm-12">
+			<div class="col-lg-6 col-sm-12 col-md-12">
 				<div class="space" style="position: relative;padding: 20px;height: 170px;">
 					<div class="answer"></div>
 					
@@ -78,7 +93,7 @@
 			</div>
 
 			<!-- réponse -->
-			<div class="col-lg-6 col-sm-12">
+			<div class="col-lg-6 col-sm-12 col-md-12">
 				<div style="margin-bottom: 10px;padding: 10px; position: relative;">
 					<div class="answer"></div>
 					<h4 class="text-success text-center" >
@@ -159,13 +174,18 @@
 
 <div id="try">
 	<div class="text-center" style="padding: 20%; ">
-		<button class="btn btn-success" onclick="render()">Try Again</button>
+
+		<button class="btn btn-success" onclick="try_again()">
+			Your Score is: <h5 class="text-center text-danger" id="score_try">5</h5>
+			Try Again
+		</button>
 	</div>
 </div>
 
 <div id="sound" onclick="sound()">
 	<i id="sound_on" class="fas fa-volume-up"></i>
 	<i id="sound_off" class="fas fa-microphone-alt-slash"></i>
+	<i id="new"  class="fab fa-neos fa-3x" onclick="load_new()"></i>
 </div>
 
 
@@ -176,20 +196,22 @@
 	var audio_false = new Audio('../asset/audio/false.wav');
 	var vn = "";
 	var en  ="";
-	var item_default = getItem();
-	var item = getItem();
+	var rr = <?php echo ($voca) ?>;
+
+	var item_default = getItem(rr);
+	var item = getItem(rr);
 	var total = item_default.length;
+
 	function render() {
 		
-		// console.log(item.length);
-		console.log(item_default.length);
-		if (item.length > 188) 
+		
+		if (item.length > 0) 
 		{
 			var i = Math.floor((Math.random() * item.length));
 			var arr = [item[i].vn,item[i].vn_f1,item[i].vn_f2];
 			var arr_shuffle = arr;
 			shuffle(arr_shuffle);
-			console.log(arr_shuffle);
+			
 			vn = item[i].vn;
 			en = item[i].en;
 			document.getElementById('total').innerHTML = total +' words';
@@ -202,16 +224,40 @@
 			document.getElementById("tested").innerHTML = score_false+score;
 			item.splice(i,1);
 		}
+
 		else{
+			var audio_win = new Audio('../asset/audio/win.mp3');
+			audio_win.play();
 			document.getElementById("try").style = "display: block";
-			alert("Your Score is: "+ score);
-			item = getItem();
+			// alert("Your Score is: "+ score);
+			document.getElementById("score_try").innerHTML = score;
+			item = getItem(rr);
 			score = 0;
 			score_false = 0;
 
 		}
 		
 	}
+	function try_again(){
+		rr = <?php echo ($voca) ?>;
+		item_default = getItem(rr);
+		item = getItem(rr);
+		total = item_default.length;
+		score = 0;
+		score_false = 0;
+		render();
+	}
+	function load_new() {
+		rr = <?php echo ($voca2) ?>;
+		item_default = getItem(rr);
+		item = getItem(rr);
+		total = item_default.length;
+		score = 0;
+		score_false = 0;
+		render();
+		console.log(item_default.length);
+	}
+
 	function restart(){
         var conf=confirm("Your Score is:");
         item = item_default;
@@ -287,9 +333,9 @@
     return array;
 }
 
-
-	function getItem(){
-		var item = <?php echo (json_encode((array)$rr)) ?>;
+	
+	function getItem(arr){
+		var item = arr;
 		return item;
 	}
 	render();
@@ -316,7 +362,7 @@
 
 	$("#total").click(function(){
         $("#list").toggle(1000);
-        var words = getItem();
+        var words = getItem(rr);
         
 
     });

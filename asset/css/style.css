@@ -25,6 +25,13 @@
 	/*position: re*/
 	border: 1px solid red; border-radius: 10px;margin-bottom: 10px;padding: 10px;
 }
+h1 a:hover{
+	text-decoration: none;
+}
+h1 a{
+	color: green;
+	font-family: "Times New Roman", Times, serif;
+}
 body{
 	background-image: url("https://webgradients.com/public/webgradients_png/034%20Lemon%20Gate.png");
 	background-repeat: no-repeat;
