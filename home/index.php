@@ -198,7 +198,8 @@
 	var vn = "";
 	var en  ="";
 	var rr = <?php echo ($voca) ?>;
-
+	var count = 5;
+	var delay = 1000;
 
 	var item_default = getItem(rr);
 	var item = getItem(rr);
@@ -312,7 +313,9 @@
 		    // default:
 		    //     document.getElementById("alert").style = "visibility: visible;opacity: 0;transition: visibility 0s linear 1000ms, opacity 1000ms;";
 		}
+
 		render();
+		// count_down();
 	}
 
 
@@ -336,12 +339,13 @@
     return array;
 }
 	
-	var count = 5;
+	
 	function count_down() {
 		var x = setInterval(function() {
 	    if (count >=0) {
+	    	// score_false++;
 	    	document.getElementById("demo").innerHTML = "Time: " + count;
-	    	document.getElementById("progress").style = "width: "+(1-count/5)*100+"%";
+	    	document.getElementById("progress").style = "width: "+((score_false + score)/total)*100+"%";
 	    	count--;
 	    }
 	    else{
@@ -352,6 +356,7 @@
 	    
 	}, 1000);
 	}
+
 	count_down();
 	function getItem(arr){
 		var item = arr;
@@ -383,12 +388,12 @@
         $("#list").toggle(1000);
         var words = getItem(rr);
         
-
+       	
+       	
     });
+
     $("#try").click(function(){
         $("#try").fadeOut(1000);
-        
-        
-
+       
     });
 </script>

@@ -58,7 +58,7 @@ body{
 	/*position: absolute;*/
 	filter: blur(10px);
 	background: green;
-	width: 50%;
+	width: 1%;
 	transition: 1s;
 	height: 10px;
 }
