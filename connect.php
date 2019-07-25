@@ -5,7 +5,7 @@ $username = "root";
  
 $password = "";
  
-$dbname = "words";
+$dbname = "trotot";
  
 $con = mysqli_connect($servername,$username,$password,$dbname);
 if($con){
